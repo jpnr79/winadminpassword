@@ -33,57 +33,76 @@
  */
 
 // Installation function
-function plugin_winadminpassword_install() {
-        global $DB;
+function plugin_winadminpassword_install(): bool {
+	return plugin_winadminpassword_update();
+}
 
-	$migration = new Migration(100);
+// Update function (called during install and upgrade)
+function plugin_winadminpassword_update(): bool {
+	global $DB;
 
-	if (!TableExists("glpi_plugin_winadminpassword_profiles")) {
-		$query_profile= "CREATE TABLE IF NOT EXISTS `glpi_plugin_winadminpassword_profiles` (
-	                        `id` int(11) NOT NULL,
-	                        `profile` varchar(255) default NULL,
-	                        `use` tinyint(1) default 0,
-	                        PRIMARY KEY (`id`)
-	                ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-	        $DB->queryOrDie($query_profile, $DB->error());
+	$migration = new Migration('2.0.0');
 
-		$migration->migrationOneTable("glpi_plugin_winadminpassword_profiles");
+	if (!$DB->tableExists("glpi_plugin_winadminpassword_profiles")) {
+		$migration->addPreQuery(
+			"CREATE TABLE IF NOT EXISTS `glpi_plugin_winadminpassword_profiles` (
+				`id` int unsigned NOT NULL,
+				`profile` varchar(255) DEFAULT NULL,
+				`use` tinyint(1) DEFAULT 0,
+				PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+		);
+	}
 
-		// Give right to current Profile
+	if (!$DB->tableExists("glpi_plugin_winadminpassword_configs")) {
+		$migration->addPreQuery(
+			"CREATE TABLE IF NOT EXISTS `glpi_plugin_winadminpassword_configs` (
+				`id` int unsigned auto_increment NOT NULL,
+				`key` varchar(255) DEFAULT NULL,
+				`length` int(11) DEFAULT 12,
+				`algo` int(11) DEFAULT 1,
+				`size` int(11) DEFAULT 14,
+				`color` varchar(255) DEFAULT NULL,
+				PRIMARY KEY (`id`)
+			) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci"
+		);
+	}
+
+	$migration->executeMigration();
+
+	// Now add initial profile entry after tables are created
+	if (!$DB->tableExists("glpi_plugin_winadminpassword_profiles")) {
+		return false;
+	}
+
+	$prof = new PluginWinadminpasswordProfile();
+	if (!$prof->getFromDB($_SESSION['glpiactiveprofile']['id'])) {
 		include_once (GLPI_ROOT . '/plugins/winadminpassword/inc/profile.class.php');
-		$prof =  new PluginWinadminpasswordProfile();
-		$prof->add(array('id'      => $_SESSION['glpiactiveprofile']['id'],
-				'profile' => $_SESSION['glpiactiveprofile']['name'],
-				'use'     => 1));
+		$prof->add([
+			'id'      => $_SESSION['glpiactiveprofile']['id'],
+			'profile' => $_SESSION['glpiactiveprofile']['name'],
+			'use'     => 1
+		]);
 	}
 
-	if (!TableExists("glpi_plugin_winadminpassword_configs")) {
-		$query = "CREATE TABLE IF NOT EXISTS `glpi_plugin_winadminpassword_configs` (
-	                        `id` int(11) NOT NULL auto_increment,
-	                        `key` varchar(255) collate utf8_unicode_ci default NULL,
-				`length` int(11) default 12,
-				`algo` int(11) default 1,
-				`size` int(11) default 14,
-				`color` varchar(255) collate utf8_unicode_ci,
-	                        PRIMARY KEY  (`id`)
-	                ) ENGINE=MyISAM DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci";
-
-		$DB->queryOrDie($query, $DB->error());
-	}
-		
-	$migration->executeMigration();	
-        return true;
+	return true;
 }
 
 // Uninstall function
-function plugin_winadminpassword_uninstall() {
-        global $DB;
+function plugin_winadminpassword_uninstall(): bool {
+	global $DB;
 
-	$tables = array("glpi_plugin_winadminpassword_profiles","glpi_plugin_winadminpassword_configs");
+	$migration = new Migration('2.0.0');
+
+	$tables = ["glpi_plugin_winadminpassword_profiles", "glpi_plugin_winadminpassword_configs"];
 	
 	foreach($tables as $table) {
-		$DB->query("DROP TABLE IF EXISTS `$table`;");
+		if ($DB->tableExists($table)) {
+			$migration->dropTable($table);
+		}
 	}
 
-        return true;
+	$migration->executeMigration();
+
+	return true;
 }

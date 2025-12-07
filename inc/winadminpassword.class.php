@@ -38,7 +38,7 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginWinadminpasswordWinadminpassword extends CommonDBTM {
 
-	static function canView() {
+	static function canView(): bool {
 		global $DB;
 
 		$profile = new PluginWinadminpasswordProfile();
@@ -51,7 +51,7 @@ class PluginWinadminpasswordWinadminpassword extends CommonDBTM {
 		}		
 	}
 
-	static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+	static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0): bool {
                 if ($item->getType() == 'Computer') {
                         $prof = new self();
                         $serial = $item->getField('serial');
@@ -73,7 +73,7 @@ class PluginWinadminpasswordWinadminpassword extends CommonDBTM {
                 return true;
         }
 
-	function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+	function getTabNameForItem(CommonGLPI $item, $withtemplate=0): string {
                 if ($item->getType() == 'Computer') {
                         return "WinAdminPassword";
                 }
@@ -86,8 +86,8 @@ class PluginWinadminpasswordWinadminpassword extends CommonDBTM {
                 return '';
         }
 
-	function menu($serial,$withtemplate='') {
-		global $LANG,$DB,$PLUGIN_HOOKS,$CFG_GLPI;
+	function menu($serial, $withtemplate=''): void {
+		global $DB,$CFG_GLPI;
 
 		$config = new PluginWinadminpasswordConfig();
 		$config->getFromDB(1);
@@ -130,14 +130,14 @@ class PluginWinadminpasswordWinadminpassword extends CommonDBTM {
 
 		if ($this->canView()) {
 			if (($serial)||($serial=='0')) {
-				echo "<div align='center'><table class='tab_cadre'><tr><th>".$LANG['plugin_winadminpassword'][2]."</th></tr>";
-				echo "<tr><td class='tab_bg_2' align='center'><font color='$color' size='$size' face='Century'>$password</font></td></tr>";
+				echo "<div class='center'><table class='tab_cadre'><tr><th>".__('Generated password')."</th></tr>";
+				echo "<tr><td class='tab_bg_2 center' style='color:".$color."; font-size:".$size."pt; font-family:monospace;'>".$password."</td></tr>";
 				echo "</table>";
 				echo "</div>";
 			}
 			else {
-				echo "<div align='center'><table class='tab_cadre'><tr><th>".$LANG['plugin_winadminpassword'][3]."</th></tr>";
-                                echo "<tr><td class='tab_bg_2' align='center'>".$LANG['plugin_winadminpassword'][4]."</td></tr>";
+				echo "<div class='center'><table class='tab_cadre'><tr><th>".__('No serial number')."</th></tr>";
+                                echo "<tr><td class='tab_bg_2 center'>".__('This item has no serial number')."</td></tr>";
                                 echo "</table>";
                                 echo "</div>";
 			}

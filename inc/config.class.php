@@ -38,16 +38,15 @@ if (!defined('GLPI_ROOT')) {
 
 class PluginWinadminpasswordConfig extends CommonDBTM {
 	
-	static function canCreate() {
+	static function canCreate(): bool {
 		return Session::haveRight("config", UPDATE);
 	}
 
-	static function canView() {
+	static function canView(): bool {
 		return Session::haveRight("config", READ);
 	}
    
-	function showForm($ID) {
-		global $LANG;
+	function showForm($ID, $options=[]): void {
 
 		if ($ID>0) {
 			$spotted = true;
@@ -57,12 +56,12 @@ class PluginWinadminpasswordConfig extends CommonDBTM {
 			$this->getEmpty();
 		}
 
-		echo "<div align='center'>";
+		echo "<div class='center'>";
 		echo "<form method='post' action='".$this->getFormURL()."'>";
-		echo "<table class='tab_cadre' cellpadding='5'>";
-		echo "<tr><th colspan='2'>".$LANG['plugin_winadminpassword']['config'][2]."</th></tr>";
+		echo "<table class='tab_cadre'>";
+		echo "<tr><th colspan='2'>".__('Configuration')."</th></tr>";
 		echo "<tr class='tab_bg_2'>";
-		echo "<td>".$LANG['plugin_winadminpassword']['config'][3]."</td><td>";
+		echo "<td>".__('Encryption key')."</td><td>";
 
 		if ($this->getFromDB(1))
 			echo "<input type='password' autocomplete='off' name='key' id='key' value='".$this->fields["key"]."'>";
@@ -74,38 +73,38 @@ class PluginWinadminpasswordConfig extends CommonDBTM {
 		echo "</td>";
 		echo "</tr>";
 		echo "<tr class='tab_bg_2'>";
-		echo "<td>".$LANG['plugin_winadminpassword']['config'][4]."</td><td>";
+		echo "<td>".__('Password length')."</td><td>";
 
 		echo "<select name='length' id='length'>";
 		if ($this->getFromDB(1))
 			echo "<option selected value='".$this->fields["length"]."'>".$this->fields["length"]."</option>";
-		echo "<option value'1'>1</option>";
-		echo "<option value'2'>2</option>";
-		echo "<option value'3'>3</option>";
-		echo "<option value'4'>4</option>";
-		echo "<option value'5'>5</option>";
-		echo "<option value'6'>6</option>";
-		echo "<option value'7'>7</option>";
-		echo "<option value'8'>8</option>";
-		echo "<option value'9'>9</option>";
-		echo "<option value'10'>10</option>";
-		echo "<option value'11'>11</option>";
-		echo "<option value'12'>12</option>";
-		echo "<option value'13'>13</option>";
-		echo "<option value'14'>14</option>";
-		echo "<option value'15'>15</option>";
-		echo "<option value'16'>16</option>";
-		echo "<option value'17'>17</option>";
-		echo "<option value'18'>18</option>";
-		echo "<option value'19'>19</option>";
-		echo "<option value'20'>20</option>";
-		echo "<option value'21'>21</option>";
-		echo "<option value'22'>22</option>";
-		echo "<option value'23'>23</option>";
-		echo "<option value'24'>24</option>";
-		echo "<option value'25'>25</option>";
-		echo "<option value'26'>26</option>";
-		echo "<option value'27'>27</option>";
+		echo "<option value='1'>1</option>";
+		echo "<option value='2'>2</option>";
+		echo "<option value='3'>3</option>";
+		echo "<option value='4'>4</option>";
+		echo "<option value='5'>5</option>";
+		echo "<option value='6'>6</option>";
+		echo "<option value='7'>7</option>";
+		echo "<option value='8'>8</option>";
+		echo "<option value='9'>9</option>";
+		echo "<option value='10'>10</option>";
+		echo "<option value='11'>11</option>";
+		echo "<option value='12'>12</option>";
+		echo "<option value='13'>13</option>";
+		echo "<option value='14'>14</option>";
+		echo "<option value='15'>15</option>";
+		echo "<option value='16'>16</option>";
+		echo "<option value='17'>17</option>";
+		echo "<option value='18'>18</option>";
+		echo "<option value='19'>19</option>";
+		echo "<option value='20'>20</option>";
+		echo "<option value='21'>21</option>";
+		echo "<option value='22'>22</option>";
+		echo "<option value='23'>23</option>";
+		echo "<option value='24'>24</option>";
+		echo "<option value='25'>25</option>";
+		echo "<option value='26'>26</option>";
+		echo "<option value='27'>27</option>";
 		echo "</select>";
                 echo "</td>";
                 echo "</tr>";
@@ -113,15 +112,15 @@ class PluginWinadminpasswordConfig extends CommonDBTM {
 		echo "</td>";
                 echo "</tr>";
                 echo "<tr class='tab_bg_2'>";
-                echo "<td>".$LANG['plugin_winadminpassword']['config'][5]."</td><td>";
+                echo "<td>".__('Algorithm')."</td><td>";
                 echo "<select name='algo' id='algo'>";
                 if ($this->getFromDB(1))
                         echo "<option selected value='".$this->fields["algo"]."'>".$this->fields["algo"]."</option>";
-                echo "<option value'1'>1</option>";
-                echo "<option value'2'>2</option>";
-                echo "<option value'3'>3</option>";
-                echo "<option value'4'>4</option>";
-                echo "<option value'5'>5</option>";
+                echo "<option value='1'>1</option>";
+                echo "<option value='2'>2</option>";
+                echo "<option value='3'>3</option>";
+                echo "<option value='4'>4</option>";
+                echo "<option value='5'>5</option>";
                 echo "</select>";
                 echo "</td>";
                 echo "</tr>";
@@ -129,20 +128,20 @@ class PluginWinadminpasswordConfig extends CommonDBTM {
 		echo "</td>";
                 echo "</tr>";
                 echo "<tr class='tab_bg_2'>";
-                echo "<td>".$LANG['plugin_winadminpassword']['config'][6]."</td><td>";
+                echo "<td>".__('Font size')."</td><td>";
                 echo "<select name='size' id='size'>";
                 if ($this->getFromDB(1))
                         echo "<option selected value='".$this->fields["size"]."'>".$this->fields["size"]."</option>";                
-		echo "<option value'1'>1</option>";
-		echo "<option value'2'>2</option>";
-                echo "<option value'3'>3</option>";
-                echo "<option value'4'>4</option>";
-                echo "<option value'5'>5</option>";
-                echo "<option value'6'>6</option>";
-                echo "<option value'7'>7</option>";
-                echo "<option value'8'>8</option>";
-                echo "<option value'9'>9</option>";
-                echo "<option value'10'>10</option>";
+		echo "<option value='1'>1</option>";
+		echo "<option value='2'>2</option>";
+                echo "<option value='3'>3</option>";
+                echo "<option value='4'>4</option>";
+                echo "<option value='5'>5</option>";
+                echo "<option value='6'>6</option>";
+                echo "<option value='7'>7</option>";
+                echo "<option value='8'>8</option>";
+                echo "<option value='9'>9</option>";
+                echo "<option value='10'>10</option>";
                 echo "</select>";
                 echo "</td>";
                 echo "</tr>";
@@ -150,38 +149,38 @@ class PluginWinadminpasswordConfig extends CommonDBTM {
 		echo "</td>";
                 echo "</tr>";
                 echo "<tr class='tab_bg_2'>";
-                echo "<td>".$LANG['plugin_winadminpassword']['config'][7]."</td><td>";
+                echo "<td>".__('Font color')."</td><td>";
                 echo "<select name='color' id='color'>";
                 if ($this->getFromDB(1))
                         echo "<option selected value='".$this->fields["color"]."'>".$this->fields["color"]."</option>";
-                echo "<option value'orange'>".$LANG['plugin_winadminpassword']['config'][8]."</option>";
-                echo "<option value'red'>".$LANG['plugin_winadminpassword']['config'][9]."</option>";
-                echo "<option value'green'>".$LANG['plugin_winadminpassword']['config'][10]."</option>";
-                echo "<option value'black'>".$LANG['plugin_winadminpassword']['config'][11]."</option>";
-                echo "<option value'white'>".$LANG['plugin_winadminpassword']['config'][12]."</option>";
-		echo "<option value'blue'>".$LANG['plugin_winadminpassword']['config'][13]."</option>";
+                echo "<option value='orange'>".__('Orange')."</option>";
+                echo "<option value='red'>".__('Red')."</option>";
+                echo "<option value='green'>".__('Green')."</option>";
+                echo "<option value='black'>".__('Black')."</option>";
+                echo "<option value='white'>".__('White')."</option>";
+		echo "<option value='blue'>".__('Blue')."</option>";
                 echo "</select>";
                 echo "</td>";
                 echo "</tr>";		
 
-		if (!$this->getFromDB(1)) {
-			echo "<tr>";
-			echo "<td class='tab_bg_2 top' colspan='2'>";
-			echo "<div align='center'><input type='submit' name='add' value=\""._sx('button','Add')."\" class='submit'></div>";
-			echo "</td>";
-			echo "</tr>";
-		} else {
-			echo "<tr>";
-			echo "<td class='tab_bg_2 top' colspan='2'><div align='center'>";
-			echo "<input type='submit' name='update' value=\""._sx('button','Update')."\" class='submit' >";
-			echo "</td>";
-			echo "</tr>";
-		}
-		echo "</td></tr>";
-		echo "</table>";
-		Html::closeForm();
-		echo "</div>";
+	if (!$this->getFromDB(1)) {
+		echo "<tr>";
+		echo "<td class='tab_bg_2 top' colspan='2'>";
+		echo "<div class='center'><input type='submit' name='add' value=\""._x('button','Add')."\" class='submit'></div>";
+		echo "</td>";
+		echo "</tr>";
+	} else {
+		echo "<tr>";
+		echo "<td class='tab_bg_2 top' colspan='2'><div class='center'>";
+		echo "<input type='submit' name='update' value=\""._x('button','Update')."\" class='submit' >";
+		echo "</td>";
+		echo "</tr>";
 	}
+	echo "</td></tr>";
+	echo "</table>";
+	Html::closeForm();
+	echo "</div>";
+}
 }
 
 ?>

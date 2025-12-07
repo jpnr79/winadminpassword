@@ -34,20 +34,20 @@
 
 class PluginWinadminpasswordProfile extends CommonDBTM {
 
-	static function canView() {
+	static function canView(): bool {
                 return Session::haveRight('profile', READ);
         }
 
-        static function canCreate() {
+        static function canCreate(): bool {
                 return Session::haveRight('profile', UPDATE);
         }
 
-	static function cleanProfiles(Profile $prof) {
+	static function cleanProfiles(Profile $prof): void {
 		$plugprof = new self();
-		$plugprof->delete(array('id'=>$prof->getField("id")));
+		$plugprof->delete(['id'=>$prof->getField("id")]);
 	}
 	
-	static function changeprofile() {
+	static function changeprofile(): void {
                 $tmp = new self();
                 if ($tmp->getFromDB($_SESSION['glpiactiveprofile']['id'])) {
                         $_SESSION["glpi_plugin_winadminpassword_profile"] = $tmp->fields;
@@ -56,7 +56,7 @@ class PluginWinadminpasswordProfile extends CommonDBTM {
                 }
         }
 
-	static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0) {
+	static function displayTabContentForItem(CommonGLPI $item, $tabnum=1, $withtemplate=0): bool {
                 if ($item->getType() == 'Profile') {
                         $prof = new self();
                         $ID = $item->getField('id');
@@ -71,19 +71,18 @@ class PluginWinadminpasswordProfile extends CommonDBTM {
                 return true;
         }
 
-	function getTabNameForItem(CommonGLPI $item, $withtemplate=0) {
+	function getTabNameForItem(CommonGLPI $item, $withtemplate=0): string {
                 if ($item->getType() == 'Profile') {
                         return "WinAdminPassword";
                 }
                 return '';
         }
 
-        function createAccess($ID,$name) {
-		$this->add(array('id' => $ID,'profile' => $name));
+        function createAccess($ID, $name): void {
+		$this->add(['id' => $ID,'profile' => $name]);
         }
 
-	function showForm($id, $options=array()) {
-		global $LANG;
+	function showForm($id, $options=[]): bool {
 
 		$target = $this->getFormURL();
 		if (isset($options['target'])) {
@@ -104,10 +103,10 @@ class PluginWinadminpasswordProfile extends CommonDBTM {
 		echo "<form action='".$target."' method='post'>";
 		echo "<table class='tab_cadre_fixe'>";
 		echo "<tr><th colspan='2' class='center b'>".
-		$LANG['plugin_winadminpassword']['profile'][1]."</th></tr>";
+		__('Profile - WinAdminPassword')."</th></tr>";
 	
 		echo "<tr class='tab_bg_1'>";
-		echo "<td>".$LANG['plugin_winadminpassword']['profile'][2]."&nbsp;:</td><td>";
+		echo "<td>".__('Use')."&nbsp;:</td><td>";
 		Dropdown::showYesNo("use", $this->fields["use"]);
 		echo "</td></tr>\n";
 	
@@ -115,11 +114,12 @@ class PluginWinadminpasswordProfile extends CommonDBTM {
 			echo "<tr class='tab_bg_1'>";
 			echo "<td colspan='2' class='center'>";
 			echo "<input type='hidden' name='id' value=$id>";
-			echo "<input type='submit' name='update_user_profile' value=\""._sx('button','Update')."\" class='submit'>&nbsp;";
+			echo "<input type='submit' name='update_user_profile' value=\""._x('button','Update')."\" class='submit'>&nbsp;";
 			echo "</td></tr>\n";
 		}
 		echo "</table>";
 		Html::closeForm();
+		return true;
 	}
 }
 ?>
