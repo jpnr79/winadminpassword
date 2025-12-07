@@ -42,20 +42,20 @@ Plugin::load('winadminpassword',true);
 
 $config = new PluginWinadminpasswordConfig;
 
-Html::Header($LANG['plugin_winadminpassword']['config'][1],'',"plugins","winadminpassword");
+Html::Header(__('Windows Admin Password', 'winadminpassword'),'',"plugins","winadminpassword");
 
 if (isset($_POST["add"])) {
 	if ($config->canCreate()) {
 		$config->add($_POST);
 	}
-	Html::redirect($_SERVER['HTTP_REFERER']);
+	Html::redirect($_SERVER['HTTP_REFERER'] ?? $_SERVER['PHP_SELF']);
 } else if (isset($_POST["update"])) {
 	if ($config->canCreate()) {
 		$config->update($_POST);
 	}
-	Html::redirect($_SERVER['HTTP_REFERER']);
+	Html::redirect($_SERVER['HTTP_REFERER'] ?? $_SERVER['PHP_SELF']);
 } else {
-	echo "<div align='center'>".$LANG['plugin_winadminpassword']['config'][1]."</div>";
+	echo "<div align='center'>".__('Windows Admin Password', 'winadminpassword')."</div>";
 	$config->showForm(1);
 }
 
