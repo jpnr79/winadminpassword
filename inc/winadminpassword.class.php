@@ -44,7 +44,7 @@ class PluginWinadminpasswordWinadminpassword extends CommonDBTM {
 
 		$profile = new PluginWinadminpasswordProfile();
                 $profile->getFromDB($_SESSION['glpiactiveprofile']['id']);
-		$use = $profile->fields['use'] ?? '';
+		$use = ($profile->fields['use'] ?? '');
 		if ($use == "1") {
 			return true;
 		} else {
@@ -93,11 +93,11 @@ class PluginWinadminpasswordWinadminpassword extends CommonDBTM {
 		$config = new PluginWinadminpasswordConfig();
 		$config->getFromDB(1);
 
-		$key = $config->fields['key'] ?? '';
-		$length = $config->fields['length'] ?? '';
-		$size = $config->fields['size'] ?? '';
-		$color = $config->fields['color'] ?? '';
-		$algo = $config->fields['algo'] ?? '';
+		$key = ($config->fields['key'] ?? '');
+		$length = ($config->fields['length'] ?? '');
+		$size = ($config->fields['size'] ?? '');
+		$color = ($config->fields['color'] ?? '');
+		$algo = ($config->fields['algo'] ?? '');
 
 		switch ($algo) {
 			case 1:
