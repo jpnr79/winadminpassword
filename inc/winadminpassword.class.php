@@ -1,4 +1,5 @@
 <?php
+/*if (!defined('GLPI_ROOT')) { define('GLPI_ROOT', realpath(__DIR__ . '/../..')); }
 /*
  * @version $Id: HEADER 1 2015-12-14 03:30 kartnico $
  -------------------------------------------------------------------------
